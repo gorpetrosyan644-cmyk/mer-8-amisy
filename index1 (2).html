@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Մեր 8 Ամիսը ❤️</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            --card-shadow: 0 15px 35px rgba(255, 117, 140, 0.15);
+            --bg-color: #0b090a;
+            --surface-color: #161a1d;
+            --text-main: #f5f3f4;
+            --accent-pink: #ff4d6d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        /* --- ԳԱՂՏՆԱԲԱՌԻ ԷԿՐԱՆ --- */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #220911 0%, #0b090a 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .login-box {
+            background: var(--surface-color); padding: 40px 30px; border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; max-width: 90%; width: 400px;
+            border: 1px solid rgba(255, 77, 109, 0.2);
+        }
+
+        .login-box h2 { margin-bottom: 15px; color: var(--accent-pink); }
+        .login-box input {
+            width: 100%; padding: 14px; background: #22252a; border: 1px solid rgba(255, 77, 109, 0.3);
+            border-radius: 50px; margin-bottom: 20px; text-align: center; font-size: 16px; color: white; outline: none;
+        }
+
+        .login-box button {
+            background: var(--primary-gradient); color: white; border: none; padding: 14px 35px;
+            border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 8px 20px rgba(255, 117, 140, 0.3);
+        }
+        .error-msg { color: #ff4d6d; font-size: 14px; margin-top: 12px; display: none; }
+
+        /* --- ԳԼԽԱՎՈՐ ԲՈՎԱՆԴԱԿՈՒԹՅՈՒՆ --- */
+        #main-content { display: none; opacity: 0; transition: opacity 1.2s ease; }
+        header { text-align: center; padding: 80px 20px; background: linear-gradient(180deg, #161a1d 0%, #0b090a 100%); border-bottom: 1px solid rgba(255, 77, 109, 0.1); }
+        header h1 { font-size: 2.8rem; background: linear-gradient(45deg, #ff4d6d, #ffb3c1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; font-weight: 700; }
+        header p { color: #a3a3a3; font-style: italic; }
+
+        /* --- ԹԱՅՄԼԱՅՆ --- */
+        .timeline-container { max-width: 850px; margin: 60px auto; position: relative; padding: 20px; }
+        .timeline-container::after { content: ''; position: absolute; width: 2px; background: linear-gradient(to bottom, var(--accent-pink), transparent); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+        .timeline-item { padding: 20px 40px; position: relative; width: 50%; }
+        .timeline-item::after { content: '✦'; position: absolute; width: 20px; height: 20px; right: -10px; top: 25px; background: var(--bg-color); color: var(--accent-pink); text-align: center; font-size: 16px; z-index: 1; }
+        .left { left: 0; } .right { left: 50%; } .right::after { left: -10px; }
+        .content { padding: 25px; background-color: var(--surface-color); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s; }
+        .content:hover { transform: translateY(-5px); border-color: rgba(255, 77, 109, 0.3); box-shadow: var(--card-shadow); }
+        .content h3 { color: var(--accent-pink); margin-bottom: 8px; }
+
+        /* --- ՔԱՐՏԵՐ --- */
+        .cards-section { max-width: 1200px; margin: 80px auto; text-align: center; padding: 0 20px; }
+        .cards-section h2 { margin-bottom: 40px; font-size: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; justify-content: center; }
+        .flip-card { background-color: transparent; width: 100%; height: 350px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; align-items: center; justify-content: center; padding: 25px; overflow: hidden; }
+        .flip-card-front { background-color: var(--surface-color); border: 1px solid rgba(255, 255, 255, 0.05); padding: 0; }
+        .flip-card-front img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .flip-card:hover .flip-card-front img { transform: scale(1.1); }
+        .flip-card-back { background: linear-gradient(135deg, #1c1a1f 0%, #110f12 100%); color: #f5f3f4; transform: rotateY(180deg); font-size: 1.1rem; line-height: 1.6; border: 1px solid rgba(255, 77, 109, 0.4); box-shadow: inset 0 0 20px rgba(255, 77, 109, 0.1); }
+
+        /* --- ՏՈՐԹ --- */
+        .cake-section { text-align: center; padding: 80px 20px; background: var(--surface-color); margin-top: 80px; border-top: 1px solid rgba(255, 77, 109, 0.1); }
+        .cake { width: 130px; height: 100px; background: #e0a96d; margin: 40px auto; position: relative; border-radius: 16px 16px 0 0; box-shadow: inset 0 12px 0 #9c6644; }
+        .candle { width: 12px; height: 45px; background: #70d6ff; position: absolute; top: -45px; left: 59px; border-radius: 6px 6px 0 0; }
+        .flame { width: 16px; height: 24px; background: #ff7b00; border-radius: 50%; position: absolute; top: -24px; left: -2px; animation: flicker 0.15s infinite alternate; cursor: pointer; box-shadow: 0 0 20px #ff7b00; }
+        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.25); } }
+
+        /* --- ԱԴՄԻՆ ՊԱՆԵԼ --- */
+        .admin-panel { max-width: 800px; margin: 80px auto; padding: 40px 30px; background: #111416; color: #fff; border-radius: 24px; border: 1px dashed rgba(255, 77, 109, 0.3); }
+        .admin-box { background: #1c2024; padding: 25px; border-radius: 16px; margin-bottom: 20px; }
+        .admin-panel input[type="text"], .admin-panel input[type="file"] { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #2d343b; background: #161a1d; color: white; outline: none; }
+        .admin-buttons { display: flex; gap: 15px; }
+        .admin-panel button { background: var(--primary-gradient); color: white; border: none; padding: 14px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        .btn-clear { background: #333 !important; }
+
+        @media screen and (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .timeline-container::after { left: 25px; }
+            .timeline-item { width: 100%; padding-left: 50px; padding-right: 10px; }
+            .timeline-item::after { left: 15px; }
+            .right { left: 0%; }
+            .admin-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>🔐 Մուտք Մեր Տիրույթ</h2>
+            <p style="margin-bottom: 20px; font-size: 14px; color: #aaa;">Գաղտնաբառը (12)</p>
+            <input type="password" id="password-input" placeholder="••••••••">
+            <button onclick="checkPassword()">Բացել նվերը ✨</button>
+            <p class="error-msg" id="error-message">Սխալ գաղտնաբառ 😜 Փորձիր նորից։</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <header>
+            <h1>Շնորհավոր 8 ամսյակ, Իմ Միակ ❤️</h1>
+            <p>Ամեն մի վայրկյանը քո կողքին անգին է...</p>
+        </header>
+
+        <section class="timeline-container">
+            <div class="timeline-item left"><div class="content"><h3>Առաջին Ամիս</h3><p>Այն օրը, երբ ամեն ինչ սկսվեց...</p></div></div>
+            <div class="timeline-item right"><div class="content"><h3>3 Ամիս</h3><p>Մեր մեծ պատմության իրական սկիզբը։</p></div></div>
+            <div class="timeline-item left"><div class="content"><h3>6 Ամիս</h3><p>Կես տարի միասին՝ անվերջ սեր։</p></div></div>
+            <div class="timeline-item right"><div class="content"><h3>8 Ամիս (Այսօր)</h3><p>Այսօր ես քեզ ավելի շատ եմ սիրում, քան երբևէ։ ❤️</p></div></div>
+        </section>
+
+        <section class="cards-section">
+            <h2>Պատճառներ, թե ինչու ես Քեզ Սիրում 🥰</h2>
+            <div class="grid" id="cards-grid">
+                </div>
+        </section>
+
+        <section class="cake-section">
+            <h2>Փչիր մոմը և պահիր երազանք 🎂</h2>
+            <div class="cake"><div class="candle"><div class="flame" id="cake-flame" onclick="blowCandle()"></div></div></div>
+            <h3 id="wish-status" style="display:none; color: var(--accent-pink);">Թող քո բոլոր երազանքները կատարվեն։ ❤️</h3>
+        </section>
+
+        <section class="admin-panel" id="admin-panel-sec">
+            <h2>🛠️ Կառավարման Վահանակ (Live GitHub Sync)</h2>
+            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Ավելացրու նոր քարտեր հենց հեռախոսիցդ։ Այն ավտոմատ կթարմացնի կայքը GitHub-ում։</p>
+            
+            <div class="admin-box">
+                <h4>Նոր Հուշ/Քարտ</h4>
+                <input type="file" id="new-card-img" accept="image/*">
+                <input type="text" id="new-card-text" placeholder="Գրիր տեքստը կամ պատճառը...">
+            </div>
+
+            <div class="admin-buttons">
+                <button onclick="addNewCard()">➕ Ավելացնել Հեռախոսից</button>
+                <button onclick="clearAllCards()" class="btn-clear">🗑️ Ջնջել Բոլորը</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- ՏՎՅԱԼՆԵՐԻ ԶԱՆԳՎԱԾ (GitHub-ը ավտոմատ կթարմացնի սա) ---
+        let loveCards = [];
+
+        // --- GITHUB CONFIGURATION ---
+        const GITHUB_USER = "gorpetrosyan644-cmyk";
+        const GITHUB_REPO = "mer-8-amisy";
+        const GITHUB_TOKEN = "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"; // <-- ՏԵՂԱԴՐԻՐ ՔՈ GHP_ ՏՈԿԵՆԸ
+
+        window.onload = function() {
+            renderCards();
+            // Գաղտնի հնարք. Ադմին պանելը կերևա միայն ՔԵԶ մոտ, եթե հղման վերջում ավելացնես ?admin=true
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') !== 'true') {
+                document.getElementById('admin-panel-sec').style.display = 'none';
+            }
+        }
+
+        function renderCards() {
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = "";
+
+            if (loveCards.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: #666; font-style: italic; padding: 20px;">Դեռ ոչ մի հուշ չկա: Մտիր կայք ?admin=true հղումով՝ ավելացնելու համար: ✨</div>`;
+                return;
+            }
+
+            loveCards.forEach((card) => {
+                const cardHtml = `
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                ${card.img ? `<img src="${card.img}">` : `<div style="padding:20px; color:var(--accent-pink);">❤️ Մեր Հուշը ❤️</div>`}
+                            </div>
+                            <div class="flip-card-back">
+                                <p>${card.text}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
+        async function addNewCard() {
+            const textInput = document.getElementById('new-card-text');
+            const fileInput = document.getElementById('new-card-img');
+
+            if (textInput.value.trim() === "") { alert("Խնդրում ենք տեքստ գրել։"); return; }
+
+            let imgData = "";
+            if (fileInput.files && fileInput.files[0]) {
+                imgData = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(fileInput.files[0]);
+                });
+            }
+
+            loveCards.push({ text: textInput.value, img: imgData });
+            await saveToGitHub();
+            textInput.value = ""; fileInput.value = "";
+        }
+
+        async function clearAllCards() {
+            if (confirm("Վստա՞հ ես, որ ուզում ես ջնջել բոլոր քարտերը։")) {
+                loveCards = [];
+                await saveToGitHub();
+            }
+        }
+
+        async function saveToGitHub() {
+            const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`;
+            
+            // 1. Ստանում ենք ընթացիկ ֆայլի SHA-ն
+            let sha = "";
+            try {
+                let res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
+                let data = await res.json();
+                sha = data.sha;
+            } catch (e) { console.log("Error fetching SHA", e); }
+
+            // 2. Փոխարինում ենք կոդի զանգվածը նոր տվյալներով
+            let currentCode = document.documentElement.outerHTML;
+            let dataString = `let loveCards = ${JSON.stringify(loveCards)};`;
+            let updatedCode = currentCode.replace(/let loveCards = \[.*?\];/, dataString);
+            let finalHtml = `<!DOCTYPE html>\n` + updatedCode;
+
+            // 3. Ուղարկում ենք թարմացումը GitHub
+            let body = {
+                message: "Update love cards from phone",
+                content: btoa(unescape(encodeURIComponent(finalHtml))),
+                sha: sha
+            };
+
+            let response = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `token ${GITHUB_TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                alert("Հրաշալի է։ Կայքը հաջողությամբ թարմացվեց GitHub-ում։ 1 րոպեից փոփոխությունները կերևան դոմեյնի վրա։ 🚀");
+                renderCards();
+            } else {
+                alert("Սխալ տեղի ունեցավ: Ստուգիր Token-ի ճշտությունը կոդում:");
+            }
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const error = document.getElementById('error-message');
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-content');
+
+            if (input.trim() === "12") {
+                loginScreen.style.transform = "translateY(-100%)";
+                setTimeout(() => {
+                    loginScreen.style.display = "none";
+                    mainContent.style.display = "block";
+                    setTimeout(() => { mainContent.style.opacity = "1"; }, 50);
+                }, 900);
+            } else { error.style.display = "block"; }
+        }
+
+        function blowCandle() {
+            document.getElementById('cake-flame').style.display = 'none';
+            document.getElementById('wish-status').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
